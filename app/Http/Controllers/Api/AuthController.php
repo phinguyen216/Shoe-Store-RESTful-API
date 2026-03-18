@@ -5,29 +5,26 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\User;
 
 class AuthController extends Controller
 {
-    //
-    public function login()
+    // Đổi tên thành login cho khớp với routes/api.php
+    public function login(Request $request)
     {
-        return view('login');
-    }
-    public function postLogin(Request $request)
-    {
-        $credentials = [
-            'email' => $request->email,
-            'password' => $request->password
-        ];
+        $credentials = $request->only('email', 'password');
+
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
+
+            // Tạo token bằng Sanctum
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'status' => true,
                 'access_token' => $token,
-                'role' => $user->role, // Trả về role để biết là Admin hay User
+                'token_type' => 'Bearer',
+                'role' => $user->role,
                 'user' => $user->name
             ]);
         }
