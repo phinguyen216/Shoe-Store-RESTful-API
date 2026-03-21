@@ -9,3 +9,8 @@
 ## Hình ảnh minh họa & Chứng minh kết quả test API
 Đã được kiểm thử trên Postman. Có thể xem dữ liệu tại thư mục `/screenshots`.
 
+### Xóa mềm (Soft Delete)
+Để đảm bảo an toàn dữ liệu, hệ thống không xóa vĩnh viễn sản phẩm mà sử dụng cơ chế **Soft Delete**.
+* **Xóa tạm thời:** Sản phẩm được đưa vào thùng rác (`deleted_at`).
+* **Thùng rác API:** `GET /api/admin/products/trash` - Cho phép Admin xem lại các món đồ đã xóa.
+* **Khôi phục:** `POST /api/admin/products/{id}/restore` - Khôi phục sản phẩm về trạng thái hoạt động trong 1 giây.

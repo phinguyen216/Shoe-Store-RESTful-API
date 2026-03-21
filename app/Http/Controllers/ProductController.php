@@ -118,4 +118,47 @@ class ProductController extends Controller
             'message' => 'Xóa sản phẩm thành công!'
         ], 200);
     }
+    public function trash()
+    {
+        $trashedProduct = Product::onlyTrashed()->get();
+        return response()->json([
+            'status' => true,
+            'data' => $trashedProduct
+        ]);
+    }
+    public function restore($id)
+    {
+        $product = Product::withTrashed()->find($id);
+
+        if ($product) {
+            $product->restore();
+            return response()->json([
+                'status' => true,
+                'message' => 'Khôi phục sản phẩm thành công!',
+                'data' => $product
+            ], 200);
+        }
+
+        return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+    }
+    public function forceDelete($id)
+{
+    // Tìm sản phẩm trong cả thùng rác
+    $product = Product::withTrashed()->find($id);
+
+    if (!$product) {
+        return response()->json(['message' => 'Không tìm thấy sản phẩm'], 404);
+    }
+
+    if ($product->image && file_exists(public_path('storage/' . $product->image))) {
+        unlink(public_path('storage/' . $product->image));
+    }
+    
+    $product->forceDelete();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Đã xóa vĩnh viễn sản phẩm và tệp tin liên quan!'
+    ], 200);
+}
 }

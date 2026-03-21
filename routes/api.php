@@ -22,7 +22,13 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::post('admin/products', [ProductController::class, 'store']);
     Route::put('admin/products/{id}', [ProductController::class, 'update']);
     Route::delete('admin/products/{id}', [ProductController::class, 'destroy']);
-    
+
     // Đăng xuất
     Route::post('logout', [AuthController::class, 'logout']);
+    //  Thùng rác
+    Route::get('admin/products/trash', [ProductController::class, 'trash']);
+    // Khôi phục
+    Route::post('admin/products/restore/{id}', [ProductController::class, 'restore']);
+    // Xóa 
+    Route::delete('admin/products/force-delete/{id}', [ProductController::class, 'forceDelete']);
 });
