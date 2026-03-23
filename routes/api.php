@@ -19,10 +19,14 @@ Route::get('products', [ProductController::class, 'index']);
 Route::get('products/{id}', [ProductController::class, 'show']);
 // Role Admin
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+    // Lấy danh sách
+    Route::get('admin/products', [ProductController::class, 'index']);
+    // Tạo mới
     Route::post('admin/products', [ProductController::class, 'store']);
+    // Sửa
     Route::put('admin/products/{id}', [ProductController::class, 'update']);
+    // Xóa
     Route::delete('admin/products/{id}', [ProductController::class, 'destroy']);
-
     // Đăng xuất
     Route::post('logout', [AuthController::class, 'logout']);
     //  Thùng rác
